@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecção de Navios</title>
+    <script>
+        async function detectBoats() {
+            const response = await fetch('/detect', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                const imgBase64 = result.image;
+
+                document.getElementById('result').innerHTML = `
+                    <p>Tempo decorrido: ${result.response.tempo_decorrido} segundos</p>
+                    <p>Número de navios detectados: ${result.response.num_boats}</p>
+                    <img src="data:image/png;base64,${imgBase64}" alt="Imagem Processada" />
+                `;
+            } else {
+                const error = await response.json();
+                document.getElementById('result').innerHTML = `<p>Erro: ${error.error}</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Detecção de Navios</h1>
+    <button onclick="detectBoats()">Detectar Navios</button>
+    <div id="result"></div>
+</body>
+</html>
