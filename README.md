@@ -2,6 +2,7 @@
 
 ![FotoSiteNavio](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/1dba5745-1942-4c9f-b28a-d1be60f73a82)
 
+![FotoSiteNavio2](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/318e268c-63b1-4bcc-bd6f-4cf7ee08e915)
 
 
 Bem-vindo ao projeto de Detecção de Navios! Este projeto utiliza o OpenCV para detectar navios em imagens.
