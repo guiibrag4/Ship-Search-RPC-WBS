@@ -115,8 +115,11 @@ Certifique-se de que o CSS e JavaScript estão corretamente incluídos e não h�
 
 Se você tiver perguntas ou sugestões, sinta-se à vontade para abrir uma issue ou entrar em contato:
 
-- **Email**: seu-email@example.com
-- **GitHub**: [seu-usuario](https://github.com/seu-usuario)
+- **Email**: prokelvin65@gmail.com
+- **GitHub**: [kelvin-sous](https://github.com/kelvin-sous)
+- 
+- **Email**: guilhermebragaepic2@gmail.com
+- **GitHub**: [guiibrag4](https://github.com/guiibrag4)
 
 ---
 
