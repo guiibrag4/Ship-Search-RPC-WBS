@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 import cv2 as cv
 import numpy as np
-import time
 import base64
 import os
 import threading
@@ -67,14 +66,8 @@ def detectar_barcos():
         global resultados_global
         resultados_global = resultados
 
-        # Redimensiona a imagem para largura de 350 pixels
-        altura, largura = imagem_processada.shape[:2]
-        nova_largura = 350
-        nova_altura = int(altura * (nova_largura / largura))
-        imagem_redimensionada = cv.resize(imagem_processada, (nova_largura, nova_altura))
-
         # Codifica a imagem processada em base64
-        _, buffer = cv.imencode('.png', imagem_redimensionada)
+        _, buffer = cv.imencode('.png', imagem_processada)
         img_bytes = buffer.tobytes()
         img_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
