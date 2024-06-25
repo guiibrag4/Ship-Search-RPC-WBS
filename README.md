@@ -118,7 +118,7 @@ Se você tiver perguntas ou sugestões, sinta-se à vontade para abrir uma issue
 - **Email**: prokelvin65@gmail.com
 - **GitHub**: [kelvin-sous](https://github.com/kelvin-sous)
 - 
-- **Email**: guilhermebragaepic2@gmail.com
+- **Email**: guilhermebragariosdacosta@gmail.com
 - **GitHub**: [guiibrag4](https://github.com/guiibrag4)
 
 ---
