@@ -1,49 +1,56 @@
 import socketio
 import requests
 import os
-import cv2 as cv
 import base64
-import time
+import logging
 
 # Configurações
 RPC_URL = 'http://127.0.0.1:5000/detectar'
 WEBSOCKET_URL = 'http://127.0.0.1:5001'
+IMAGEM_SAIDA_PATH = 'imagem_processada.png'
 
 # Inicialização do cliente WebSocket
 sio = socketio.Client()
 
+# Configuração do logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logger = logging.getLogger()
+
 @sio.event
 def connect():
-    print('Conectado ao servidor WebSocket')
+    logger.info('Conectado ao servidor WebSocket')
     sio.emit('mensagem', {'status': 'Cliente conectado'})
 
 @sio.event
 def disconnect():
-    print('Desconectado do servidor WebSocket')
+    logger.info('Desconectado do servidor WebSocket')
 
 @sio.event
 def log(data):
-    print(f'Log recebido do WebSocket: {data["log"]}')
+    logger.info(f'Log recebido do WebSocket: {data["log"]}')
 
 @sio.event
 def resultado(data):
-    print(f'Resultado recebido do WebSocket: {data}')
+    logger.info(f'Resultado recebido do WebSocket: {data}')
+    if 'image' in data:
+        imagem_saida_path = os.path.join(os.path.dirname(__file__), IMAGEM_SAIDA_PATH)
+        with open(imagem_saida_path, "wb") as f:
+            f.write(base64.b64decode(data['image']))
+        logger.info(f'Imagem processada salva como {imagem_saida_path}')
 
-def enviar_imagem_para_rpc(imagem_path):
+def enviar_imagem_para_rpc(imagem_base64):
     try:
-        with open(imagem_path, 'rb') as imagem:
-            files = {'file': imagem}
-            resposta = requests.post(RPC_URL, files=files)
-            if resposta.status_code == 200:
-                resultado = resposta.json()
-                print(f'Resposta do RPC: {resultado}')
-                sio.emit('resultado', resultado)
-                sio.emit('mensagem', {'status': 'Imagem processada pelo RPC'})
-            else:
-                print(f'Erro ao enviar imagem para o RPC: {resposta.json()}')
-                sio.emit('mensagem', {'status': 'Erro ao processar imagem no RPC'})
+        resposta = requests.post(RPC_URL, files={'file': base64.b64decode(imagem_base64)})
+        if resposta.status_code == 200:
+            resultado = resposta.json()
+            logger.info(f'Resposta do RPC: {resultado}')
+            sio.emit('resultado', resultado)
+            sio.emit('mensagem', {'status': 'Imagem processada pelo RPC'})
+        else:
+            logger.error(f'Erro ao enviar imagem para o RPC: {resposta.json()}')
+            sio.emit('mensagem', {'status': 'Erro ao processar imagem no RPC'})
     except Exception as e:
-        print(f'Erro ao enviar imagem para RPC: {e}')
+        logger.error(f'Erro ao enviar imagem para RPC: {e}')
         sio.emit('mensagem', {'status': f'Erro ao enviar imagem: {str(e)}'})
 
 def main():
@@ -53,15 +60,7 @@ def main():
     # Log inicial
     sio.emit('mensagem', {'status': 'Cliente iniciado'})
 
-    # Exemplo: Enviar uma imagem para o RPC
-    imagem_path = 'caminho/para/sua/imagem.png'
-    if os.path.exists(imagem_path):
-        print(f'Enviando imagem {imagem_path} para o RPC...')
-        enviar_imagem_para_rpc(imagem_path)
-    else:
-        print(f'Arquivo de imagem não encontrado: {imagem_path}')
-        sio.emit('mensagem', {'status': 'Arquivo de imagem não encontrado'})
-
+    # Aguardando pela imagem enviada pela página web
     sio.wait()
 
 if __name__ == '__main__':

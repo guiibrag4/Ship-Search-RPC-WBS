@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, jsonify
-import requests
 import base64
+import socketio
 
 app = Flask(__name__)
+sio = socketio.Client()
 
 @app.route('/')
 def index():
@@ -17,15 +18,12 @@ def upload():
         # Codificar a imagem para base64
         image_base64 = base64.b64encode(image).decode('utf-8')
 
-        # Enviar a imagem para o servidor RPC
-        response = requests.post('http://127.0.0.1:5002/process_image', json={'image': image_base64})
-        response_data = response.json()
+        # Enviar a imagem para o servidor RPC através do WebSocket
+        sio.connect('http://127.0.0.1:5001')
+        sio.emit('imagem', {'image': image_base64})
+        sio.disconnect()
 
-        if 'error' in response_data:
-            return jsonify({'error': response_data['error']}), 500
-
-        processed_image_base64 = response_data['image']
-        return jsonify({'image': processed_image_base64})
+        return jsonify({'status': 'Imagem enviada com sucesso'})
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
