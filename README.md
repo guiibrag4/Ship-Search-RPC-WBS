@@ -1,5 +1,3 @@
-# Detecção de Navios
-
 Bem-vindo ao projeto de Detecção de Navios! Este projeto utiliza o OpenCV para detectar navios em imagens.
 
 ## Índice
@@ -123,8 +121,13 @@ Se você tiver perguntas ou sugestões, sinta-se à vontade para abrir uma issue
 
 ---
 
-![FotoSiteNavio](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/1dba5745-1942-4c9f-b28a-d1be60f73a82)
+<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/1dba5745-1942-4c9f-b28a-d1be60f73a82" width="1400" height="200">
+<hr>
+<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/318e268c-63b1-4bcc-bd6f-4cf7ee08e915" width="1400" height="700">
+<hr>
+<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/131495236/2a6e945a-fee4-4914-a5ea-8dc22cf5eece" width="1400" height="700">
 
-![FotoSiteNavio2](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/318e268c-63b1-4bcc-bd6f-4cf7ee08e915)
+
+
 
 Obrigado por conferir nosso projeto! Esperamos que seja útil e interessante para você.
