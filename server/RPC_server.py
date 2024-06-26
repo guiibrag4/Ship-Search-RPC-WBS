@@ -3,8 +3,10 @@ import cv2 as cv
 import numpy as np
 import base64
 import os
+import re
 import threading
 import logging
+import time
 
 # Configuração do logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -33,7 +35,27 @@ def processar_segmento_imagem(segmento, resultados, idx):
             return
 
         imagem_cinza = cv.cvtColor(segmento, cv.COLOR_BGR2GRAY)
-        barcos = classificador.detectMultiScale(imagem_cinza, scaleFactor=1.4, minNeighbors=14, minSize=(150, 150), maxSize=(250, 250))
+        
+        # Verifica as dimensões da imagem
+        altura, largura = segmento.shape[:2]
+        if largura >= 5000 or altura >= 3000:
+            scaleFactor = 1.4
+            minNeighbors = 14
+            minSize = (150, 150)
+            maxSize = (250, 250)
+        elif largura >= 3000 or altura >= 1000:
+            # Defina aqui os parâmetros para imagens menores que 5000x3000
+            scaleFactor = 1.2
+            minNeighbors = 4
+            minSize = (150, 150)
+            maxSize = (250, 250)
+        else:
+            scaleFactor = 1.1
+            minNeighbors = 2
+            minSize = (30, 30)
+            maxSize = (1000, 1000)
+
+        barcos = classificador.detectMultiScale(imagem_cinza, scaleFactor=scaleFactor, minNeighbors=minNeighbors, minSize=minSize, maxSize=maxSize)
         for (x, y, l, a) in barcos:
             cv.rectangle(segmento, (x, y), (x + l, y + a), (0, 255, 0), 5)
         resultados[idx] = f"Segmento processado {idx} com {len(barcos)} barcos detectados"
@@ -80,9 +102,17 @@ def detectar_barcos():
         file.save(file_path)
         logger.info(f"Arquivo {file.filename} salvo em {file_path}")
 
+        # Início da medição do tempo
+        start_time = time.time()
+
         # Processa a imagem
         imagem = cv.imread(file_path)
         resultados, imagem_processada = dividir_e_processar_imagem(imagem)
+
+        # Fim da medição do tempo
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        formatted_time = time.strftime('%M:%S', time.gmtime(elapsed_time)) + f":{int((elapsed_time * 1000) % 1000):03d}"
 
         global resultados_global
         resultados_global = resultados
@@ -99,12 +129,12 @@ def detectar_barcos():
 
         logger.info("Imagem processada e codificada para base64")
 
-        # Calcula o tempo decorrido como uma soma fictícia dos resultados
-        tempo_decorrido = sum([result.count('detectados') for result in resultados])
+        # Correção: Usando expressão regular para extrair o número de barcos de forma segura
+        total_boats = sum([int(re.search(r'(\d+) barcos detectados', result).group(1)) for result in resultados if 'barcos detectados' in result])
 
         response = {
-            "tempo_decorrido": tempo_decorrido,
-            "num_boats": len(resultados)
+            "tempo_decorrido": formatted_time,
+            "num_boats": total_boats
         }
 
         return jsonify({"image": img_base64, "response": response})
