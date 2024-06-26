@@ -78,7 +78,6 @@
             margin-top: 20px;
         }
 
-        /* Spinner styles */
         .spinner {
             display: none;
             margin: 20px auto;
@@ -95,7 +94,11 @@
         }
     </style>
 
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
     <script>
+        const socket = io('http://127.0.0.1:5001'); // Certifique-se de usar o endereço e a porta corretos
+
         async function detectBoats() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
@@ -107,35 +110,44 @@
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('file', file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imagemBase64 = e.target.result.split(',')[1];
+                
+                // Show spinner
+                spinner.style.display = 'block';
+                resultDiv.innerHTML = '';
 
-            // Show spinner
-            spinner.style.display = 'block';
-            resultDiv.innerHTML = '';
+                socket.emit('processar_imagem', { imagem: imagemBase64 });
+            }
+            reader.readAsDataURL(file);
+        }
 
-            const response = await fetch('/detectar', {
-                method: 'POST',
-                body: formData
-            });
+        socket.on('resultado_imagem', function(data) {
+            const resultDiv = document.getElementById('result');
+            const spinner = document.getElementById('spinner');
 
             // Hide spinner
             spinner.style.display = 'none';
 
-            if (response.ok) {
-                const result = await response.json();
-                const imgBase64 = result.image;
+            const imgBase64 = data.image;
 
-                resultDiv.innerHTML = `
-                    <p>Tempo decorrido: ${result.response.tempo_decorrido} segundos</p>
-                    <p>Número de navios detectados: ${result.response.num_boats}</p>
-                    <img src="data:image/png;base64,${imgBase64}" alt="Imagem Processada" />
-                `;
-            } else {
-                const error = await response.json();
-                resultDiv.innerHTML = `<p>Erro: ${error.error}</p>`;
-            }
-        }
+            resultDiv.innerHTML = `
+                <p>Tempo decorrido: ${data.response.tempo_decorrido} segundos</p>
+                <p>Número de navios detectados: ${data.response.num_boats}</p>
+                <img src="data:image/png;base64,${imgBase64}" alt="Imagem Processada" />
+            `;
+        });
+
+        socket.on('erro', function(data) {
+            const resultDiv = document.getElementById('result');
+            const spinner = document.getElementById('spinner');
+
+            // Hide spinner
+            spinner.style.display = 'none';
+
+            resultDiv.innerHTML = `<p>Erro: ${data.error}</p>`;
+        });
     </script>
 </head>
 

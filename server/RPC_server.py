@@ -1,4 +1,7 @@
-from flask import Flask, request, render_template, jsonify
+import eventlet
+eventlet.monkey_patch()
+
+from flask import Flask, request, jsonify
 import cv2 as cv
 import numpy as np
 import base64
@@ -7,10 +10,6 @@ import threading
 
 app = Flask(__name__)
 resultados_global = []
-
-@app.route('/')
-def index():
-    return render_template('index.html', resultados=resultados_global)
 
 def processar_segmento_imagem(segmento, resultados, idx):
     try:
@@ -48,19 +47,10 @@ def dividir_e_processar_imagem(imagem):
 @app.route('/detectar', methods=['POST'])
 def detectar_barcos():
     try:
-        if 'file' not in request.files:
-            return jsonify(error="Nenhum arquivo enviado"), 400
+        imagem_data = base64.b64decode(request.json['imagem'])
+        np_img = np.frombuffer(imagem_data, np.uint8)
+        imagem = cv.imdecode(np_img, cv.IMREAD_COLOR)
 
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify(error="Nenhum arquivo selecionado"), 400
-
-        # Salva o arquivo temporariamente
-        file_path = os.path.join('uploads', file.filename)
-        file.save(file_path)
-
-        # Processa a imagem
-        imagem = cv.imread(file_path)
         resultados, imagem_processada = dividir_e_processar_imagem(imagem)
 
         global resultados_global
@@ -71,15 +61,12 @@ def detectar_barcos():
         img_bytes = buffer.tobytes()
         img_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
-        # Calcula o tempo decorrido como uma soma fictícia dos resultados
-        tempo_decorrido = sum([result.count('detectados') for result in resultados])
-
         response = {
-            "tempo_decorrido": tempo_decorrido,
-            "num_boats": len(resultados)
+            "resultados": resultados,
+            "imagem_processada": img_base64
         }
 
-        return jsonify({"image": img_base64, "response": response})
+        return jsonify(response)
 
     except Exception as e:
         return jsonify(error=str(e)), 500
@@ -87,4 +74,4 @@ def detectar_barcos():
 if __name__ == '__main__':
     if not os.path.exists('uploads'):
         os.makedirs('uploads')
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5002)

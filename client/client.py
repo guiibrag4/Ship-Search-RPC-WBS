@@ -1,29 +1,29 @@
 import socketio
-import requests
+import logging
 
-# Cliente para o servidor RPC
-url_rpc = 'http://127.0.0.1:5000/detectar'
-resposta = requests.post(url_rpc, json={'dados': 'teste'})
-print(f'Resposta RPC: {resposta.json()}')
-
-# Cliente para o servidor WebSocket
-sio = socketio.Client()
+sio = socketio.Client(logger=True, engineio_logger=True)
 
 @sio.event
 def conectar():
-    print('Conectado ao servidor WebSocket')
+    logging.info('Conectado ao servidor WebSocket')
 
 @sio.event
 def progresso(dados):
-    print(f'Atualização de progresso: {dados}')
+    logging.info(f'Atualização de progresso: {dados}')
 
 @sio.event
 def resultado(dados):
-    print(f'Resultado final: {dados}')
+    logging.info(f'Resultado final: {dados}')
+
+@sio.event
+def erro(dados):
+    logging.info(f'Erro: {dados["error"]}')
 
 @sio.event
 def desconectar():
-    print('Desconectado do servidor WebSocket')
+    logging.info('Desconectado do servidor WebSocket')
+
+logging.basicConfig(level=logging.DEBUG)
 
 sio.connect('http://127.0.0.1:5001')
 sio.send('Olá do cliente')
