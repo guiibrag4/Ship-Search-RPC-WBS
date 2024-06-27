@@ -78,7 +78,6 @@
             margin-top: 20px;
         }
 
-        /* Spinner styles */
         .spinner {
             display: none;
             margin: 20px auto;
@@ -110,7 +109,6 @@
             const formData = new FormData();
             formData.append('file', file);
 
-            // Show spinner
             spinner.style.display = 'block';
             resultDiv.innerHTML = '';
 
@@ -119,7 +117,6 @@
                 body: formData
             });
 
-            // Hide spinner
             spinner.style.display = 'none';
 
             if (response.ok) {

@@ -44,7 +44,6 @@ def processar_segmento_imagem(segmento, resultados, idx):
             minSize = (150, 150)
             maxSize = (250, 250)
         elif largura >= 3000 or altura >= 1000:
-            # Defina aqui os parâmetros para imagens menores que 5000x3000
             scaleFactor = 1.2
             minNeighbors = 4
             minSize = (150, 150)
@@ -102,14 +101,13 @@ def detectar_barcos():
         file.save(file_path)
         logger.info(f"Arquivo {file.filename} salvo em {file_path}")
 
-        # Início da medição do tempo
+        # Início da medição do cronômetro
         start_time = time.time()
 
-        # Processa a imagem
         imagem = cv.imread(file_path)
         resultados, imagem_processada = dividir_e_processar_imagem(imagem)
 
-        # Fim da medição do tempo
+        # Fim da medição do cronômetro
         end_time = time.time()
         elapsed_time = end_time - start_time
         formatted_time = time.strftime('%M:%S', time.gmtime(elapsed_time)) + f":{int((elapsed_time * 1000) % 1000):03d}"

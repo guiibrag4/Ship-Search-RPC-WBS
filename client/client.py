@@ -4,7 +4,7 @@ import os
 import base64
 import logging
 
-# Configurações
+# Configurações de comunicação
 RPC_URL = 'http://127.0.0.1:5000/detectar'
 WEBSOCKET_URL = 'http://127.0.0.1:5001'
 IMAGEM_SAIDA_PATH = 'imagem_processada.png'
@@ -56,11 +56,9 @@ def enviar_imagem_para_rpc(imagem_base64):
 def main():
     # Conectar ao WebSocket
     sio.connect(WEBSOCKET_URL)
-    
-    # Log inicial
+
     sio.emit('mensagem', {'status': 'Cliente iniciado'})
 
-    # Aguardando pela imagem enviada pela página web
     sio.wait()
 
 if __name__ == '__main__':
