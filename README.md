@@ -59,15 +59,16 @@ Este projeto foi desenvolvido para demonstrar a capacidade de detecção de obje
 
 ## Uso
 
-1. Inicie o servidor Flask:
+1. Inicie o main.py:
+   Ele inicia automaticamente todos os servidores
 
     ```sh
-    python app.py
+    python main.py
     ```
 
-2. Abra o navegador e acesse `http://127.0.0.1:5000`.
+3. Abra o navegador e acesse `http://127.0.0.1:5000`.
 
-3. Faça o upload de uma imagem e clique em "Detectar Navios".
+4. Faça o upload de uma imagem e clique em "Detectar Navios".
 
 ## Contribuindo
 
