@@ -1,4 +1,10 @@
-Bem-vindo ao projeto de Detecção de Navios! Este projeto utiliza o OpenCV para detectar navios em imagens.
+# Detecção de Navios
+
+Bem-vindo ao projeto de Detecção de Navios! Este projeto utiliza RPC (Remote Procedure Call), Threads e OpenCV para detectar navios na imagem. 
+
+![FotoSiteNavio](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/1dba5745-1942-4c9f-b28a-d1be60f73a82)
+
+![FotoSiteNavio2](https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/318e268c-63b1-4bcc-bd6f-4cf7ee08e915)
 
 ## Índice
 
@@ -59,16 +65,15 @@ Este projeto foi desenvolvido para demonstrar a capacidade de detecção de obje
 
 ## Uso
 
-1. Inicie o main.py:
-   Ele inicia automaticamente todos os servidores
+1. Inicie o servidor Flask:
 
     ```sh
-    python main.py
+    python app.py
     ```
 
-3. Abra o navegador e acesse `http://127.0.0.1:5000`.
+2. Abra o navegador e acesse `http://127.0.0.1:5000`.
 
-4. Faça o upload de uma imagem e clique em "Detectar Navios".
+3. Faça o upload de uma imagem e clique em "Detectar Navios".
 
 ## Contribuindo
 
@@ -114,21 +119,12 @@ Certifique-se de que o CSS e JavaScript estão corretamente incluídos e não h�
 
 Se você tiver perguntas ou sugestões, sinta-se à vontade para abrir uma issue ou entrar em contato:
 
-- **Email**: prokelvin65@gmail.com
-- **GitHub**: [kelvin-sous](https://github.com/kelvin-sous)
-- 
-- **Email**: guilhermebragariosdacosta@gmail.com
-- **GitHub**: [guiibrag4](https://github.com/guiibrag4)
+**Email**: prokelvin65@gmail.com  
+**GitHub**: [@kelvin-sous](https://github.com/kelvin-sous)  
+  <br>
+**Email**: guilhermebragariosdacosta@gmail.com  
+**GitHub**: [@guiibrag4](https://github.com/guiibrag4)
 
 ---
-
-<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/1dba5745-1942-4c9f-b28a-d1be60f73a82" width="1400" height="200">
-<hr>
-<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/145872728/318e268c-63b1-4bcc-bd6f-4cf7ee08e915" width="1400" height="700">
-<hr>
-<img src="https://github.com/kelvin-sous/Ship-Search-RPC-WBS/assets/131495236/2a6e945a-fee4-4914-a5ea-8dc22cf5eece" width="1400" height="700">
-
-
-
 
 Obrigado por conferir nosso projeto! Esperamos que seja útil e interessante para você.
