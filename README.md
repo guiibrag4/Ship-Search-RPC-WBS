@@ -40,8 +40,8 @@ Este projeto foi desenvolvido para demonstrar a capacidade de detecção de obje
 1. Clone o repositório:
 
     ```sh
-    git clone https://github.com/seu-usuario/deteccao-de-navios.git
-    cd deteccao-de-navios
+    https://github.com/guiibrag4/Ship-Search-RPC-WBS.git
+    cd Ship-Search-RPC-WBS
     ```
 
 2. Crie um ambiente virtual e ative-o:
